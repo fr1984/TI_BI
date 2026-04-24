@@ -1,0 +1,52 @@
+:root { --primary: #0078d4; --bg: #f3f5f8; --card: #ffffff; --text: #201f1e; --border: #edebe9; --success: #107c41; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
+.navbar { background: var(--primary); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.hidden { display: none !important; }
+
+/* Layout a due colonne largo */
+.container { max-width: 1600px; margin: 2rem auto; padding: 0 1rem; }
+.main-grid { display: grid; grid-template-columns: 450px 1fr; gap: 2rem; align-items: start; }
+
+/* Upload */
+.upload-section { background: var(--card); padding: 3rem; border-radius: 8px; border: 2px dashed #a19f9d; text-align: center; margin-bottom: 2rem; cursor: pointer; transition: 0.3s; }
+.upload-section:hover { border-color: var(--primary); background: #f3f9fd; }
+
+/* Cards Generiche */
+.card { background: var(--card); padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 1.5rem; position: relative; }
+
+/* Colonna Sinistra (Filtri e KPI) */
+.kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.kpi-mini { border-left: 4px solid var(--primary); padding-left: 1rem; background: var(--card); padding: 1rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.kpi-title { font-size: 0.7rem; font-weight: 700; color: #605e5c; text-transform: uppercase; }
+.kpi-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-top: 0.3rem; }
+
+.filter-group { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.2rem; }
+.filter-label { font-size: 0.75rem; font-weight: 700; color: #605e5c; text-transform: uppercase; }
+.btn-group { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.btn-filter { padding: 0.4rem 0.8rem; border: 1px solid var(--border); background: white; cursor: pointer; border-radius: 4px; font-weight: 600; font-size: 0.8rem; }
+.btn-filter.active { background: var(--primary); color: white; border-color: var(--primary); }
+.btn-reset { position: absolute; top: 1.5rem; right: 1.5rem; border: none; background: #e1dfdd; padding: 5px 10px; cursor: pointer; border-radius: 4px; font-weight: 600; font-size: 0.75rem; }
+
+.input-search { width: 100%; padding: 0.7rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.95rem; box-sizing: border-box; outline: none; }
+.input-search:focus { border-color: var(--primary); }
+
+/* Tabella Risultati (Sinistra) */
+.results-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.results-table th { background: #faf9f8; padding: 8px; text-align: left; border-bottom: 1px solid var(--border); color: #605e5c; }
+.results-table td { padding: 8px; border-bottom: 1px solid var(--border); }
+.results-table tr { cursor: pointer; transition: 0.2s; }
+.results-table tr:hover { background: #f3f9fd; }
+
+/* Colonna Destra (Dettagli e Tabs) */
+.detail-header { display: flex; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+.detail-title { font-size: 1.8rem; font-weight: 700; color: var(--primary); margin:0; }
+
+.tabs { display: flex; gap: 1rem; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; }
+.tab-btn { padding: 0.8rem 1.5rem; border: none; background: none; cursor: pointer; font-weight: 700; color: #a19f9d; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: 0.2s; font-size: 0.9rem; }
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+.budget-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; font-size: 0.95rem; }
+.budget-table th { background: #f3f2f1; padding: 12px; text-align: left; border-bottom: 2px solid var(--border); color: #323130; }
+.budget-table td { padding: 12px; border-bottom: 1px solid var(--border); }
+.budget-table .total-row { font-weight: 800; background: #f3f9fd; color: var(--primary); }
+.section-title { font-size: 1.1rem; font-weight: 700; color: #323130; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
