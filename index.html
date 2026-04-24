@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Insight - Advanced Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="navbar">
+    <h1 style="margin:0; font-size: 1.2rem;">PROJECT INSIGHT - BUDGET & KPI</h1>
+    <div id="file-indicator" style="font-size: 0.85rem; font-weight: 600; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 4px;">In attesa di DB.xlsx</div>
+</div>
+
+<div class="container">
+    <div class="upload-section" id="drop-zone">
+        <h2 style="margin: 0 0 10px 0; color: var(--primary);">📥 Trascina qui il file DB.xlsx</h2>
+        <p style="margin: 0; color: #666;">Il sistema leggerà i fogli: Progetto, Attività e Pianificazione</p>
+        <input type="file" id="fileInput" accept=".xlsx" class="hidden" />
+    </div>
+
+    <div id="main-app" class="main-grid hidden">
+
+        <div class="left-panel">
+            <div class="kpi-row">
+                <div class="kpi-mini"><div class="kpi-title">Commesse Trovate</div><div class="kpi-value" id="kpi-count">0</div></div>
+                <div class="kpi-mini"><div class="kpi-title">Valore Totale</div><div class="kpi-value" id="kpi-total">€ 0,00</div></div>
+            </div>
+
+            <div class="card">
+                <button class="btn-reset" id="btn-reset">↻ Reset Filtri</button>
+
+                <div class="filter-group">
+                    <div class="filter-label">Business Unit</div>
+                    <div class="btn-group" id="bu-group">
+                        <button class="btn-filter active" data-filter-key="BU" data-filter-val="ALL">TUTTI</button>
+                        <button class="btn-filter" data-filter-key="BU" data-filter-val="BU001">TI-BS</button>
+                        <button class="btn-filter" data-filter-key="BU" data-filter-val="BU002">TI-PG</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-label">Anno (dal Codice)</div>
+                    <div class="btn-group" id="year-group">
+                        <button class="btn-filter active" data-filter-key="Year" data-filter-val="ALL">TUTTI</button>
+                        <button class="btn-filter" data-filter-key="Year" data-filter-val="2023">2023</button>
+                        <button class="btn-filter" data-filter-key="Year" data-filter-val="2024">2024</button>
+                        <button class="btn-filter" data-filter-key="Year" data-filter-val="2025">2025</button>
+                        <button class="btn-filter" data-filter-key="Year" data-filter-val="2026">2026</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-label">Tipo Commessa</div>
+                    <div class="btn-group" id="type-group">
+                        <button class="btn-filter active" data-filter-key="Type" data-filter-val="ALL">TUTTI</button>
+                        <button class="btn-filter" data-filter-key="Type" data-filter-val="TI">TI</button>
+                        <button class="btn-filter" data-filter-key="Type" data-filter-val="CI">CI</button>
+                    </div>
+                </div>
+
+                <hr style="border:0; border-top:1px solid var(--border); margin: 1.5rem 0;">
+
+                <div class="filter-group">
+                    <div class="filter-label">Ricerca Cliente</div>
+                    <input list="clientiList" id="searchClient" class="input-search">
+                    <datalist id="clientiList"></datalist>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-label">Ricerca Commessa</div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input list="commesseList" id="searchID" class="input-search">
+                        <button class="btn-filter" id="btn-reset-search" style="margin:0;">✖</button>
+                    </div>
+                    <datalist id="commesseList"></datalist>
+                </div>
+            </div>
+
+            <div class="card" id="results-card" style="padding: 1rem; max-height: 400px; overflow-y: auto;">
+                <table class="results-table">
+                    <thead><tr><th>Codice</th><th>Cliente</th></tr></thead>
+                    <tbody id="results-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div id="empty-state" class="card" style="text-align:center; padding: 5rem 2rem; color: #a19f9d;">
+                <h2>Seleziona una commessa</h2>
+                <p>Usa i filtri o la ricerca a sinistra per analizzare i budget di un progetto.</p>
+            </div>
+
+            <div id="detail-view" class="hidden">
+                <div class="card">
+                    <div class="detail-header">
+                        <div>
+                            <div class="filter-label">Commessa Selezionata</div>
+                            <h2 class="detail-title" id="det-id"></h2>
+                            <div id="det-desc" style="font-weight: 500; margin-top: 5px;"></div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="filter-label">Cliente</div>
+                            <div id="det-client" style="font-size: 1.2rem; font-weight: 600;"></div>
+                            <span id="det-status" style="display:inline-block; margin-top:5px; padding:3px 8px; background:#e1dfdd; border-radius:4px; font-size:0.8rem; font-weight:bold;"></span>
+                        </div>
+                    </div>
+
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="prev">BUDGET PREVENTIVO</button>
+                        <button class="tab-btn" data-tab="cons">BUDGET CONSUNTIVO</button>
+                    </div>
+
+                    <div id="tab-prev" class="tab-content">
+                        <div class="section-title">📦 Budget Materiali (Attività di Progetto)</div>
+                        <table class="budget-table">
+                            <thead><tr><th>Gruppo Materiale</th><th style="text-align:right;">Importo Preventivo</th></tr></thead>
+                            <tbody id="mat-body"></tbody>
+                        </table>
+
+                        <div class="section-title">⏱️ Budget Ore (Pianificazione Progetto)</div>
+                        <div style="overflow-x: auto;">
+                            <table class="budget-table">
+                                <thead id="ore-head"></thead>
+                                <tbody id="ore-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="tab-cons" class="tab-content hidden">
+                        <div id="cons-empty-state" class="hidden" style="padding: 3rem; text-align: center; color: #666; background: #faf9f8; border-radius: 8px;">
+                            <p>Dati a consuntivo non presenti in questo database</p>
+                        </div>
+
+                        <div id="cons-content" class="hidden">
+                            <div class="section-title">📦 Budget Materiali (Movimenti contabili)</div>
+                            <table class="budget-table">
+                                <thead><tr><th>Gruppo Materiale</th><th style="text-align:right;">Importo Consuntivo</th></tr></thead>
+                                <tbody id="cons-mat-body"></tbody>
+                            </table>
+
+                            <div class="section-title">⏱️ Budget Ore (Movimenti risorse)</div>
+                            <div style="overflow-x: auto;">
+                                <table class="budget-table">
+                                    <thead id="cons-ore-head"></thead>
+                                    <tbody id="cons-ore-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
